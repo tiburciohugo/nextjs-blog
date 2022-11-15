@@ -23,11 +23,11 @@ export function getSortedPostsData() { // Get file names under /posts
     // Combine the data with the id
     return {
       id,
-      ...matterResult.data,
+     ...matterResult.data as { date: string; title: string },
     };
   });
   // Sort posts by date
-  return allPostsData.sort(({ date: a }, { date: b }) => {
+ return allPostsData.sort(({ date: a }, { date: b }) => {
     if (a < b) {
       return 1;
     } else if (a > b) {
@@ -63,7 +63,7 @@ export function getAllPostIds() { // Returns the list of file names under /posts
   });
 }
 
-export async function getPostData(id) { // Returns the post data based on id
+export async function getPostData(id: string) { // Returns the post data based on id
   const fullPath = path.join(postsDirectory, `${id}.md`);
   const fileContents = fs.readFileSync(fullPath, 'utf8');
 
@@ -80,6 +80,6 @@ export async function getPostData(id) { // Returns the post data based on id
   return {
     id,
     contentHtml,
-    ...matterResult.data,
+    ...matterResult.data as {date: string; title: string},
   };
 }

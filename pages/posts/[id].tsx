@@ -2,6 +2,18 @@ import Head from "next/head";
 import Layout from "../../components/layout";
 import { getAllPostIds, getPostData } from "../../lib/posts";
 import Date from "../../components/date";
+import { useRouter } from "next/router";
+
+type params = {
+  params: { id: string };
+};
+
+type postData = {
+  title: string;
+  date: string;
+  id?: string;
+  contentHtml: string;
+};
 
 export async function getStaticPaths() {
   const paths = getAllPostIds();
@@ -11,7 +23,7 @@ export async function getStaticPaths() {
   };
 }
 
-export async function getStaticProps({ params }) {
+export async function getStaticProps({ params }: params) {
   const postData = await getPostData(params.id);
   return {
     props: {
@@ -20,7 +32,12 @@ export async function getStaticProps({ params }) {
   };
 }
 
-export default function Post({ postData }) {
+export default function Post({ postData }: { postData: postData }) {
+  const router = useRouter();
+  if (router.isFallback) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <Layout>
       <Head>
@@ -31,7 +48,6 @@ export default function Post({ postData }) {
         <h1 className="text-2xl font-bold mb-4 drop-shadow-md">
           {postData.title}
         </h1>
-        <h2 className="text-xl font-semibold mb-4">{postData.id}</h2>
         <div className="text-sm text-gray-500 font-light">
           <Date dateString={postData.date} />
         </div>

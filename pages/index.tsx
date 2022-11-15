@@ -3,6 +3,13 @@ import Link from "next/link";
 import Layout, { siteTitle } from "../components/layout";
 import { getSortedPostsData } from "../lib/posts";
 import Date from "../components/date";
+import { GetStaticProps } from "next";
+
+type allPostsData = {
+  date: string;
+  title: string;
+  id: string;
+}[];
 
 export async function getStaticProps() {
   const allPostsData = getSortedPostsData();
@@ -14,7 +21,7 @@ export async function getStaticProps() {
   };
 }
 
-export default function Home({ allPostsData }) {
+export default function Home({ allPostsData }: { allPostsData: allPostsData }) {
   return (
     <Layout home>
       <Head>
@@ -43,7 +50,7 @@ export default function Home({ allPostsData }) {
             href="https://nextjs.org/learn"
             target={"_blank"}
           >
-            our Next.js tutorial
+            their Next.js tutorial
           </a>
           .)
         </p>
@@ -63,7 +70,7 @@ export default function Home({ allPostsData }) {
               >
                 {title}
               </Link>
-              <div className="mt-2 font-light">{id}</div>
+              <br />
               <small className="text-gray-500 text-sm font-light mt-2">
                 <Date dateString={date} />
               </small>
